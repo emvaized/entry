@@ -18,8 +18,12 @@ class Entry extends StatelessWidget {
   /// The initial opacity (goes from [opacity] to 1)
   final double opacity;
 
+  final double endOpacity;
+
   /// The initial scale (goes from [scale] to 1)
   final double scale;
+
+  final double endScale;
 
   /// The initial horizontal offset (goes from [xOffset] to 0)
   final double xOffset;
@@ -37,12 +41,14 @@ class Entry extends StatelessWidget {
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.ease,
     this.opacity = 1,
+    this.endOpacity = 1,
+    this.endScale = 1,
     this.scale = 1,
     this.xOffset = 0,
     this.yOffset = 0,
     this.angle = 0,
     required this.child,
-  })   : assert(opacity >= 0 && opacity <= 1),
+  })  : assert(opacity >= 0 && opacity <= 1),
         super(key: key); // coverage:ignore-line
 
   /// Constructor making use of every animation by default except [angle]
@@ -52,7 +58,9 @@ class Entry extends StatelessWidget {
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.ease,
     this.opacity = 0,
+    this.endOpacity = 1,
     this.scale = 0,
+    this.endScale = 1,
     this.xOffset = 0,
     this.yOffset = 150,
     this.angle = 0,
@@ -66,8 +74,10 @@ class Entry extends StatelessWidget {
     Duration duration = const Duration(milliseconds: 300),
     Curve curve = Curves.ease,
     double opacity = 0,
+    double endOpacity = 1,
     required Widget child,
-  }) : this( // coverage:ignore-line
+  }) : this(
+          // coverage:ignore-line
           key: key,
           delay: delay,
           duration: duration,
@@ -76,6 +86,7 @@ class Entry extends StatelessWidget {
           child: child,
           yOffset: 0,
           scale: 1,
+          endScale: 1,
         );
 
   /// Scale-only constructor
@@ -85,13 +96,16 @@ class Entry extends StatelessWidget {
     Duration duration = const Duration(milliseconds: 300),
     Curve curve = Curves.ease,
     double scale = 0,
+    double endScale = 1,
     required Widget child,
-  }) : this( // coverage:ignore-line
+  }) : this(
+          // coverage:ignore-line
           key: key,
           delay: delay,
           duration: duration,
           curve: curve,
           scale: scale,
+          endScale: endScale,
           child: child,
           yOffset: 0,
           opacity: 1,
@@ -106,7 +120,8 @@ class Entry extends StatelessWidget {
     double xOffset = 0,
     double yOffset = 1000,
     required Widget child,
-  }) : this( // coverage:ignore-line
+  }) : this(
+          // coverage:ignore-line
           key: key,
           delay: delay,
           duration: duration,
@@ -115,14 +130,16 @@ class Entry extends StatelessWidget {
           yOffset: yOffset,
           child: child,
           opacity: 1,
+          endOpacity: 1,
           scale: 1,
+          endScale: 1,
         );
 
   @override
   Widget build(BuildContext context) {
     final tween = MultiTween<String>()
-      ..add("opacity", Tween(begin: opacity, end: 1.0), duration, curve)
-      ..add("scale", Tween(begin: scale, end: 1.0), duration, curve)
+      ..add("opacity", Tween(begin: opacity, end: endOpacity), duration, curve)
+      ..add("scale", Tween(begin: scale, end: endScale), duration, curve)
       ..add("xOffset", Tween(begin: xOffset, end: 0.0), duration, curve)
       ..add("yOffset", Tween(begin: yOffset, end: 0.0), duration, curve)
       ..add("angle", Tween(begin: angle, end: 0.0), duration, curve);
